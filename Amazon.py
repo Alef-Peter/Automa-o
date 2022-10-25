@@ -3,15 +3,16 @@ from selenium.webdriver.common.by import By
 import pandas as pd
 import time
 
+#TABELA QUE SE TORNARÁ UM DATAFRAME
 tabela = {'Produto': [],
           'Preço': []}
 
-
+####INICIANDO O NAVEGADOR####
 navegador = webdriver.Chrome()
 navegador.get('https://www.amazon.com.br/s?bbn=16243890011&rh=n%3A16209062011%2Cn%3A%2116209063011%2Cn%3A16243803011%2Cn%3A16243890011%2Cp_89%3AApple&tag=hydrbrgk-20&ref=pd_sl_2f6lzeiv63_e')
 time.sleep(2)
 
-
+####OBTENDO OS DADOS NA AMAZON####
 data_index = 0
 try:
     raspagem = navegador.find_elements(By.XPATH, '//span[@data-component-type="s-search-results"]//span[@class="a-size-base-plus a-color-base a-text-normal"]')
@@ -22,6 +23,7 @@ try:
                                           f'//div[@data-index="{data_index}"]//*[@class="a-size-base-plus a-color-base a-text-normal"]').text
             preco_produto = i.find_element(By.XPATH,
                                            f'//div[@data-index="{data_index}"]//*[@class="a-price-whole"]').text
+            ####GUARDANDO AS INFORMAÇÕES ANTES DE TRANSFORMAR A TABELA E UM DATAFRAME####
             tabela['Produto'].append(nome_produto)
             tabela['Preço'].append(preco_produto)
         except:
@@ -30,7 +32,7 @@ try:
 except:
     print ('Primeiro elemento não encontrado')
 
-
+####TRANSFORMANDO A TABELA NUM DATAFRAME
 tabela_vendas = pd.DataFrame(tabela)
 print(tabela_vendas)
 
